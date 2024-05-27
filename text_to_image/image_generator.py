@@ -14,7 +14,7 @@ import grpc
 from text_to_image import grpc_predict_v2_pb2, grpc_predict_v2_pb2_grpc
 from utils import storage
 
-grpc_host = os.environ.get('GRPC_HOST', 'modelmesh-serving')
+grpc_host = os.environ.get('GRPC_HOST', 'modelmesh-serving.peter-ho-stable-diffusion-project')
 grpc_port = int(os.environ.get('GRPC_PORT', '8033'))
 textencoder_model_name = os.environ.get('TEXTENCODER_MODEL_NAME', 'textencoder')
 unet_model_name = os.environ.get('UNET_MODEL_NAME', 'unet')
@@ -77,10 +77,10 @@ def unet(encoder_hidden_states, timestep, sample):
 
     inputs.append(grpc_predict_v2_pb2.ModelInferRequest().InferInputTensor())
     inputs[1].name = "timestep"
-    inputs[1].datatype = "INT64"
+    inputs[1].datatype = "FP32"
     inputs[1].shape.extend([2, 1])
     arr = timestep.flatten()
-    inputs[1].contents.int64_contents.extend(arr)
+    inputs[1].contents.fp32_contents.extend(arr)
 
     inputs.append(grpc_predict_v2_pb2.ModelInferRequest().InferInputTensor())
     inputs[2].name = "sample"
